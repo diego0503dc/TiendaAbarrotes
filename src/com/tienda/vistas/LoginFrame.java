@@ -16,7 +16,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         // 1. Configuración básica de la ventana
-        setTitle("Login - Tienda Abarrotes");
+        setTitle("Login - Abarrotes Violeta");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centrar en pantalla
@@ -24,10 +24,11 @@ public class LoginFrame extends JFrame {
         setResizable(false);
 
         // 2. Título
-        JLabel lblTitulo = new JLabel("Tienda Abarrotes");
+        JLabel lblTitulo = new JLabel("Abarrotes Violeta");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitulo.setBounds(90, 20, 250, 30);
         add(lblTitulo);
+        lblTitulo.setForeground(new Color(138, 43, 226)); // Texto Violeta
 
         // 3. Email
         JLabel lblEmail = new JLabel("Correo Electrónico:");
@@ -50,8 +51,9 @@ public class LoginFrame extends JFrame {
         // 5. Botón
         btnIngresar = new JButton("INGRESAR");
         btnIngresar.setBounds(50, 230, 280, 40);
-        btnIngresar.setBackground(new Color(33, 150, 243)); // Azul
-        btnIngresar.setForeground(Color.WHITE);
+        // Antes era azul o verde, ahora:
+        btnIngresar.setBackground(new Color(138, 43, 226)); // Fondo Violeta
+        btnIngresar.setForeground(Color.WHITE); // Letra Blanca para que resalte
         btnIngresar.setFont(new Font("Arial", Font.BOLD, 14));
         add(btnIngresar);
 
@@ -72,7 +74,6 @@ public class LoginFrame extends JFrame {
         Usuario usuario = dao.login(email, pass);
 
         if (usuario != null) {
-            JOptionPane.showMessageDialog(null, "¡Bienvenido " + usuario.getNombreCompleto() + "!");
             // AQUÍ MÁS ADELANTE ABRIREMOS EL MENÚ PRINCIPAL
             this.dispose(); // Cierra esta ventana
             MenuPrincipal menu = new MenuPrincipal(usuario);

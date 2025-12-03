@@ -20,12 +20,15 @@ public class MenuPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
+        // Cambiar el color de fondo de toda la ventana
+        this.getContentPane().setBackground(new Color(245, 240, 255)); 
         
         // 2. Bienvenida
         JLabel lblBienvenida = new JLabel("Bienvenido, " + usuario.getNombreCompleto());
         lblBienvenida.setFont(new Font("Arial", Font.BOLD, 20));
         lblBienvenida.setBounds(30, 20, 500, 30);
         add(lblBienvenida);
+        lblBienvenida.setForeground(new Color(75, 0, 130)); // 
         
         JLabel lblRol = new JLabel("Rol: " + (usuario.getIdRol() == 1 ? "ADMINISTRADOR" : "CAJERO"));
         lblRol.setFont(new Font("Arial", Font.ITALIC, 14));
@@ -51,8 +54,13 @@ public class MenuPrincipal extends JFrame {
         add(btnProductos);
 
         // Botón Ventas (Caja)
+        // Botón Ventas (Caja)
         JButton btnVentas = crearBoton("Nueva Venta", 510, 100);
-        btnVentas.setBackground(new Color(0, 153, 76)); // Verde para ventas
+        btnVentas.setBackground(new Color(0, 153, 76)); 
+        btnVentas.addActionListener(e -> {
+            // AQUI SI debemos abrir la caja
+            new VentasFrame(this.usuarioActual).setVisible(true);
+        });
         add(btnVentas);
         
         // Botón Usuarios (Solo visible para Admins)
@@ -60,6 +68,9 @@ public class MenuPrincipal extends JFrame {
             JButton btnUsuarios = crearBoton("Gestionar Usuarios", 50, 200);
             btnUsuarios.setBackground(new Color(255, 102, 0)); // Naranja
             add(btnUsuarios);
+            btnUsuarios.addActionListener(e -> {
+                new UsuariosFrame().setVisible(true);
+            });
         }
     }
 
@@ -67,10 +78,14 @@ public class MenuPrincipal extends JFrame {
     private JButton crearBoton(String texto, int x, int y) {
         JButton btn = new JButton(texto);
         btn.setBounds(x, y, 200, 80);
-        btn.setBackground(new Color(33, 150, 243)); // Azul
+        btn.setBackground(new Color(138, 43, 226)); // Tu color Violeta
         btn.setForeground(Color.WHITE);
-        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14)); // Cambié la fuente a una más moderna también
+        // ---------------------------
+
         btn.setFocusPainted(false);
+        // Borde redondeado (Truco visual simple)
+        btn.setBorder(BorderFactory.createLineBorder(new Color(75, 0, 130), 2));
         return btn;
     }
 }

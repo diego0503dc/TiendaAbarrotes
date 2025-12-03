@@ -75,4 +75,57 @@ public class ProductoDAO {
         }
         return lista;
     }
+    // Buscar producto por CÓDIGO DE BARRAS (Para el escáner)
+    public Producto buscarPorCodigo(String codigo) {
+        Producto p = null;
+        String sql = "SELECT * FROM productos WHERE codigo_barras = ? AND stock > 0";
+        
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, codigo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    p = new Producto();
+                    p.setId(rs.getInt("id_producto"));
+                    p.setCodigoBarras(rs.getString("codigo_barras"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setPrecio(rs.getDouble("precio"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setIdProveedor(rs.getInt("id_proveedor"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error buscar por código: " + e.getMessage());
+        }
+        return p;
+    }
+    // Buscar productos que contengan cierto texto en el nombre
+    public List<Producto> buscarPorNombre(String texto) {
+        List<Producto> lista = new ArrayList<>();
+        // ILIKE es exclusivo de Postgres: ignora mayúsculas y minúsculas
+        String sql = "SELECT * FROM productos WHERE nombre ILIKE ? AND stock > 0"; 
+        
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, "%" + texto + "%"); // Los % son para buscar coincidencia parcial
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Producto p = new Producto();
+                    p.setId(rs.getInt("id_producto"));
+                    p.setCodigoBarras(rs.getString("codigo_barras"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setPrecio(rs.getDouble("precio"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setIdProveedor(rs.getInt("id_proveedor"));
+                    lista.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error buscar por nombre: " + e.getMessage());
+        }
+        return lista;
+    }
 }
